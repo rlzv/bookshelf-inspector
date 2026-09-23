@@ -66,10 +66,56 @@ popular_books = book_stats[
     book_stats["rating_count"] >= minimum_ratings
 ].copy()
 
-top_books = popular_books.sort_values(
+# Keep the catalogue columns we need.
+book_details = books[
+    ["ISBN", "Book-Title", "Book-Author"]
+].drop_duplicates(subset="ISBN")
+
+# Attach titles and authors to books with at least 50 ratings.
+ranked_books = popular_books.merge(
+    book_details,
+    on="ISBN",
+    how="inner",
+    validate="one_to_one",
+)
+
+# Create consistent labels for comparing titles and authors.
+ranked_books["title_key"] = (
+    ranked_books["Book-Title"].str.strip().str.casefold()
+)
+
+ranked_books["author_key"] = (
+    ranked_books["Book-Author"].str.strip().str.casefold()
+)
+
+# For matching titles and authors, keep the edition with most ratings.
+unique_books = (
+    ranked_books.sort_values(
+        by=["rating_count", "ISBN"],
+        ascending=[False, True],
+    )
+    .drop_duplicates(subset=["title_key", "author_key"])
+)
+
+# Rank the remaining editions by their average rating.
+top_books = unique_books.sort_values(
     by=["average_rating", "rating_count", "ISBN"],
     ascending=[False, False, True],
 ).head(20)
 
-print("\n--- Top 20 ISBNs with at least 50 ratings ---")
-print(top_books.to_string(index=False))
+print("\n--- Top 20 books ---")
+
+print(
+    top_books[
+        [
+            "Book-Title",
+            "Book-Author",
+            "rating_count",
+            "average_rating",
+        ]
+    ].round(2).to_string(index=False)
+)
+
+print(f"\nEligible editions: {len(ranked_books):,}")
+print(f"Unique title-author pairs: {len(unique_books):,}")
+print(f"Selected recommendations: {len(top_books)}")
