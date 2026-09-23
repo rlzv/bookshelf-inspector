@@ -30,3 +30,16 @@ for name, data in [
     print(f"Rows: {len(data):,}")
     print("Columns:", data.columns.tolist())
     print(data.head(3).to_string(index=False))
+
+# Count how often each rating value appears.
+print("\n--- Rating distribution ---")
+print(ratings["Book-Rating"].value_counts().sort_index())
+
+# Keep explicit ratings for calculating book quality.
+explicit_ratings = ratings[
+    ratings["Book-Rating"].between(1, 10)
+].copy()
+
+print(f"\nAll interactions: {len(ratings):,}")
+print(f"Explicit ratings: {len(explicit_ratings):,}")
+print(f"Zero ratings: {(ratings['Book-Rating'] == 0).sum():,}")
