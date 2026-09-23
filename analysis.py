@@ -1,6 +1,6 @@
 import zipfile
-
 import pandas as pd
+from pathlib import Path
 
 
 # Open the dataset archive without extracting it.
@@ -119,3 +119,33 @@ print(
 print(f"\nEligible editions: {len(ranked_books):,}")
 print(f"Unique title-author pairs: {len(unique_books):,}")
 print(f"Selected recommendations: {len(top_books)}")
+
+# Create a separate folder for our simplified analysis results.
+output_folder = Path("output/simple")
+output_folder.mkdir(parents=True, exist_ok=True)
+
+# Select the columns useful to the client.
+recommendations = top_books[
+    [
+        "ISBN",
+        "Book-Title",
+        "Book-Author",
+        "rating_count",
+        "average_rating",
+    ]
+].copy()
+
+recommendations["average_rating"] = (
+    recommendations["average_rating"].round(2)
+)
+
+# Save without the pandas row index.
+output_file = output_folder / "recommended_books.csv"
+
+recommendations.to_csv(
+    output_file,
+    index=False,
+    encoding="utf-8-sig",
+)
+
+print(f"\nSaved {len(recommendations)} recommendations to {output_file}")
