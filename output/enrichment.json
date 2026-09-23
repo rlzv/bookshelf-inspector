@@ -1,0 +1,19 @@
+{
+  "books": [
+    {
+      "identity": "0345339711",
+      "status": "request_failed",
+      "error_type": "HTTPError"
+    }
+  ],
+  "authors": [
+    {
+      "author": "J. K. Rowling",
+      "status": "needs_editorial_identity_review",
+      "candidate_title": "J. K. Rowling",
+      "biography_candidate": "Joanne Rowling (  ROH-ling; born 31 July 1965), better known by her pen name J. K. Rowling, is a British author, philanthropist, producer, and screenwriter. She is best known for writing Harry Potter, a seven-volume series about a young wizard and the best-selling book series in history, with over 600 million copies sold.",
+      "source": "https://en.wikipedia.org/wiki/J._K._Rowling",
+      "retrieved_at": "2026-09-23T14:14:00.121698+00:00"
+    }
+  ]
+}

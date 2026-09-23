@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+archive.zip
+data/
+output/api_cache/
+.env
